@@ -119,14 +119,14 @@ class TwoFingerGripper(Gripper):
         self.move(target_pos[0], target_pos[1], target_pos[2] + 0.2, roll, pitch, yaw)
         for _ in range(100):
             p.stepSimulation()
-            time.sleep(time_step)
+            # time.sleep(time_step)
 
         # --- Lower onto object ---
         self.move(target_pos[0], target_pos[1], grasp_height, roll, pitch, yaw)
-        print("\033[93mmove to the grasp height")
+        # print("\033[93mmove to the grasp height")
         for _ in range(100):
             p.stepSimulation()
-            time.sleep(time_step)
+            #time.sleep(time_step)
 
         # --- Close gripper strongly ---
         for joint in [0, 2]:
@@ -134,7 +134,7 @@ class TwoFingerGripper(Gripper):
                                     targetPosition=0.12, force=300, maxVelocity=2)
         for _ in range(100):  # allow contact to form
             p.stepSimulation()
-            time.sleep(time_step)
+            # time.sleep(time_step)
 
         # --- Continuous hold while lifting step-by-step ---
         z_current = grasp_height
@@ -151,7 +151,7 @@ class TwoFingerGripper(Gripper):
                                         targetPosition=0.12, force=400, maxVelocity=2)
 
             p.stepSimulation()
-            time.sleep(time_step)
+            # time.sleep(time_step)
 
     def get_position(self):
         pass

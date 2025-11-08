@@ -20,7 +20,7 @@ class Simulation:
         "two_finger": TwoFingerGripper
     }
 
-    def __init__(self, iterations, data=None, object="box", gripper="two_finger"):
+    def __init__(self, iterations, data=None, object="cylinder", gripper="two_finger"):
         self.positionSuccess = {}
         self.start_simulation()
         step_threshold = 1200 # 5 seconds at 240Hz
@@ -36,14 +36,15 @@ class Simulation:
                 if len(contact_points) > 0:
                     step_count += 1
                     if step_count >= step_threshold and verify_once == True:
-                        print("Grasped Successfully")
+                        print("Success")
                         self.positionSuccess[tuple(self.startPosition)] = True
                         verify_once = False
             self.reset_scene()
-        print(self.positionSuccess)
+            if verify_once == True:
+                print("Failure")
+                self.positionSuccess[tuple(self.startPosition)] = False
+        print(self.positionSuccess.values())
         p.disconnect()
-
-
 
     def start_simulation(self):
         p.connect(p.GUI)

@@ -2,7 +2,7 @@ import pybullet as p
 import pybullet_data
 import time
 from abc import abstractmethod
-
+import os
 
 class SceneObject:
     """Base class for any object in the PyBullet scene."""
@@ -48,9 +48,11 @@ class Cylinder(SceneObject):
     
     def __init__(self, position, orientation=None):
         # Setup the object
-        super().__init__("cylinder.urdf", position)
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        urdf_path = os.path.join(current_dir, "cylinder.urdf")
+        super().__init__(urdf_path, position)
         self.grasp_height = 0.1
         self.name = f"{self.id}"
 
-    def update_name(self, name, shape="Cylinder"):
+    def update_name(self, name, shape="cylinder"):
         return super().update_name(name, shape)
