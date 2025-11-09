@@ -109,6 +109,9 @@ class TwoFingerGripper(Gripper):
         """Perform grasping and lifting sequence with sustained gripping force."""
         target_pos, approach_pos = self.target_position(obj)
         roll, pitch, yaw = self.generate_angles(approach_pos, target_pos) # Generate angles based on offset obj pos
+        # roll = self.orientation[0]
+        # pitch = self.orientation[1]
+        # yaw = self.orientation[2]
         grasp_height = obj.grasp_height
         time_step = 1./240.
         # --- Set friction on contact surfaces ---
@@ -126,7 +129,7 @@ class TwoFingerGripper(Gripper):
         # print("\033[93mmove to the grasp height")
         for _ in range(100):
             p.stepSimulation()
-            #time.sleep(time_step)
+            # time.sleep(time_step)
 
         # --- Close gripper strongly ---
         for joint in [0, 2]:

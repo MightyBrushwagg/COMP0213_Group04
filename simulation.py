@@ -6,13 +6,14 @@ import pandas as pd
 import numpy as np
 from objects import Box, Cylinder
 from grippers import TwoFingerGripper
-from RandDataset import pos
+# from RandDataset import pos
 import random
+from data import Data
 
 class Simulation:
 
     obj_dic = {
-        "box": Box,
+        "cube": Box,
         "cylinder": Cylinder
     }
 
@@ -20,31 +21,48 @@ class Simulation:
         "two_finger": TwoFingerGripper
     }
 
-    def __init__(self, iterations, data=None, object="cylinder", gripper="two_finger"):
+    def __init__(self, iterations, object="cylinder", gripper="two_finger"):
+        self.data = Data()
         self.positionSuccess = {}
         self.start_simulation()
-        step_threshold = 1200 # 5 seconds at 240Hz
+        step_threshold = 3*240 # 3 seconds at 240Hz = 720
         step_count = 0
+        self.iterations = iterations
+        self.run_simulations(self.iterations, object, gripper, step_threshold, step_count)
+        
+        p.disconnect()
+        print(self.data.data)
+        self.save_data()
+
+    def run_simulations(self, iterations, object, gripper, step_threshold, step_count):
         for i in range(iterations):
-            self.startPosition = pos[random.randint(0, len(pos) - 1)]
+            run_data = self.data.data.loc[i]
+            # print(f"run data: {run_data}")
+            pos = [run_data["x"], run_data["y"], run_data["z"]]
+            orientations = [run_data["roll"], run_data["pitch"], run_data["yaw"]]
+            # print(f"pos: {pos}")
             verify_once = True
-            self.run_one(object, gripper)
+            self.run_one(object, gripper, gripper_pos=pos, gripper_ori=orientations)
             for j in range(2000):
                 p.stepSimulation()
-                #time.sleep(1./240.)
+                # time.sleep(1./240.)
                 contact_points = p.getContactPoints(self.gripper.id, self.object.id)
                 if len(contact_points) > 0:
                     step_count += 1
                     if step_count >= step_threshold and verify_once == True:
                         print("Success")
-                        self.positionSuccess[tuple(self.startPosition)] = True
+                        # self.positionSuccess[tuple(self.startPosition)] = True
                         verify_once = False
+                        break
             self.reset_scene()
             if verify_once == True:
                 print("Failure")
-                self.positionSuccess[tuple(self.startPosition)] = False
+                # self.positionSuccess[tuple(self.startPosition)] = False
+            else:
+                print("Success")
+            run_data["success"] = not verify_once
+            self.data.data.loc[i] = run_data
         print(self.positionSuccess.values())
-        p.disconnect()
 
     def start_simulation(self):
         p.connect(p.GUI)
@@ -55,19 +73,18 @@ class Simulation:
         plane_id = p.loadURDF("plane.urdf")
         return plane_id
     
-    def run_one(self, object, gripper):
-        self.create_scene(object=object, gripper=gripper)
+    def run_one(self, object, gripper, gripper_pos = [0,0,0], gripper_ori=[0,0,0]):
+        self.create_scene(object=object, gripper=gripper, gripper_pos=gripper_pos, gripper_ori=gripper_ori)
         
-
     def save_data(self):
-        pass
+        self.data.data.to_csv("cube-twofingergripper")
 
     def upload_data(self):
         pass
 
-    def create_scene(self, object, gripper):
+    def create_scene(self, object, gripper, gripper_pos = [0,0,0], gripper_ori=[0,0,0]):
         self.object = Simulation.obj_dic[object]([0,0,0])
-        self.gripper = Simulation.gripper_dic[gripper](self.startPosition)
+        self.gripper = Simulation.gripper_dic[gripper](base_position=gripper_pos, orientation=gripper_ori) # , orientation=gripper_ori
         obj_id = self.object.load()
         self.object.update_name(obj_id)
 
