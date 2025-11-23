@@ -30,7 +30,7 @@ class Data:
         points = R * normalised_coords
         # print(points.T.shape)
         # print(points)
-        noise = np.random.normal(0, 0.2, size=(3, num_points))
+        noise = np.random.normal(0, 0.02, size=(3, num_points))
 
         noisy = points + noise
         valid = np.array([[coord[0], coord[1], coord[2]] for coord in noisy.T if coord[2] >= height])
@@ -45,7 +45,6 @@ class Data:
     
     def import_data(self, path):
         self.data = pd.read_csv(path)
-        self.positions = pd.DataFrame()
 
     def upload_data(self, path):
         self.remove_nans()
@@ -76,9 +75,8 @@ class Data:
 
         return np.array([roll, pitch, yaw])
 
-    def add_data(self, *args):
-        self.data.loc[len(self.data)] = args
-        # print(self.data)
+    def update_success(self, idx, success=True):
+        self.data.at[idx, "success"] = success
 
     def remove_nans(self):
         self.data.dropna(inplace=True)
@@ -86,6 +84,37 @@ class Data:
     def statistics(self):
         self.remove_nans()
         print(self.data["success"].value_counts())
+
+
+    def create_model_datasets(self, num_points, validation_points, test_points):
+        ## split data into train, val, test
+        ## making sure there is an equal amount of success and failure in each set
+        if len(self.data) < (num_points/2 + validation_points/2 + test_points/2):
+            raise ValueError("Not enough data points to create datasets.")
+        self.remove_nans()
+        success_data = self.data[self.data["success"] == True].reset_index()
+        failure_data = self.data[self.data["success"] == False].reset_index()
+        train_data = pd.DataFrame()
+        val_data = pd.DataFrame()
+        test_data = pd.DataFrame()
+        print(failure_data.loc[0])
+        
+        for i in range(num_points//2):
+            # print(failure_data.loc[i])
+            # row = pd.concat([success_data.loc[i], failure_data.loc[i]], axis=0).to_frame().T
+            # train_data = pd.concat([train_data, success_data.loc[i], failure_data.loc[i]], axis=0)
+            train_data = pd.concat([train_data, success_data.loc[[i]], failure_data.loc[[i]]], axis=0)
+        
+        for i in range(num_points//2, num_points//2 + validation_points//2):
+            val_data = pd.concat([val_data, success_data.loc[[i]], failure_data.loc[[i]]], axis=0)
+
+        for i in range(num_points//2 + validation_points//2, num_points//2 + validation_points//2 + test_points//2):
+            test_data = pd.concat([test_data, success_data.loc[[i]], failure_data.loc[[i]]],axis=0)
+        
+        # print(train_data.reset_index())
+        # print(test_data.reset_index())
+
+        return train_data.reset_index(), val_data.reset_index(), test_data.reset_index()
 
     def visualise_data(self):
         self.remove_nans()
@@ -128,7 +157,6 @@ class Data:
         ax.set_ylim(-.4,.4)
         plt.savefig("output.jpg")
         plt.show()
-
 
     def draw_reference_cube(self, ax, center, side):
         """Draws a cube centered at `center` with edge length `side`."""

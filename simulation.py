@@ -63,13 +63,12 @@ class Simulation:
                 # self.positionSuccess[tuple(self.startPosition)] = False
             else:
                 print("Success")
-            run_data["success"] = not verify_once
-            self.data.data.loc[i] = run_data
+            self.data.update_success(i, success=(not verify_once))
         print(self.positionSuccess.values())
 # Add in ground contacts + limit gripper contact to 2 
 
     def start_simulation(self):
-        p.connect(p.GUI) # GUI = visual, Direct = no visuals = Faster
+        p.connect(p.DIRECT) # GUI = visual, Direct = no visuals = Faster
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.resetSimulation()
         p.setGravity(0, 0, -10)
@@ -80,8 +79,8 @@ class Simulation:
     def run_one(self, object, gripper, gripper_pos = [0,0,0], gripper_ori=[0,0,0]):
         self.create_scene(object=object, gripper=gripper, gripper_pos=gripper_pos, gripper_ori=gripper_ori)
         
-    def save_data(self):
-        self.data.upload_data("cube-twofingergripper")
+    def save_data(self, name = "cube-twofingergripper"):
+        self.data.upload_data(name)
 
     def create_scene(self, object, gripper, gripper_pos = [0,0,0], gripper_ori=[0,0,0]):
         self.object = Simulation.obj_dic[object]([0,0,0.075])
