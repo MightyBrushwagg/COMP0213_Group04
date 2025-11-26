@@ -97,7 +97,7 @@ class Data:
         train_data = pd.DataFrame()
         val_data = pd.DataFrame()
         test_data = pd.DataFrame()
-        print(failure_data.loc[0])
+        # print(failure_data.loc[0])
         
         for i in range(num_points//2):
             # print(failure_data.loc[i])

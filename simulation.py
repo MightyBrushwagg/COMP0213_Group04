@@ -24,7 +24,7 @@ class Simulation:
     def __init__(self, iterations, object="cylinder", gripper="two_finger"):
         self.data = Data(num_points=iterations*2 + 100)
         self.positionSuccess = {}
-        self.start_simulation()
+        self.start_simulation(visuals="no visuals")
         step_threshold = 3*240 # 3 seconds at 240Hz = 720
         step_count = 0
         self.iterations = iterations
@@ -67,8 +67,9 @@ class Simulation:
         print(self.positionSuccess.values())
 # Add in ground contacts + limit gripper contact to 2 
 
-    def start_simulation(self):
-        p.connect(p.DIRECT) # GUI = visual, Direct = no visuals = Faster
+    def start_simulation(self, visuals = "visuals"):
+        visual_dict={"visuals": p.GUI, "no visuals": p.GUI}
+        p.connect(visual_dict[visuals]) # GUI = visual, Direct = no visuals = Faster
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.resetSimulation()
         p.setGravity(0, 0, -10)
