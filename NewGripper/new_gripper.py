@@ -231,7 +231,7 @@ def grasp_and_lift(obj_id, obj_pos, lift_height=0.4, approach_steps=60, lift_ste
         
         # Apply small corrective velocity if drifting
         height_error = hold_height - current_pos[2]
-        corrective_velocity = height_error * 2.0  # Gentle proportional control
+        corrective_velocity = height_error * 50.0  # Gentle proportional control
         
         # Set velocity to counteract any drift
         p.resetBaseVelocity(gripper_id, linearVelocity=[0, 0, corrective_velocity], angularVelocity=[0, 0, 0])
