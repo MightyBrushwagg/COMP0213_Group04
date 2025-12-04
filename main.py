@@ -54,10 +54,10 @@ if __name__ == "__main__":
         
         if args.model == "all":
             for model_name, accuracy in results.items():
-                print(f"{model_name} test accuracy: {accuracy}")
+                print(f"{model_name} test accuracy: {accuracy:.2f}")
         else:
             model.fit()
-            print(f"{args.model} test accuracy: {model.test()}")
+            print(f"{args.model} test accuracy: {model.test():.2f}")
 
     # sim = Simulation(1000, object="cube", gripper="two_finger", visuals="no visuals")
     """object = cube, cylinder | gripper = new_gripper, two_finger | visuals = visuals, no visuals """
