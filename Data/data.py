@@ -165,6 +165,20 @@ class Data:
         """
         self.data.at[idx, "success"] = success
 
+    def update_orientation(self, idx, roll, pitch, yaw):
+        """
+        Update orientation angles for a specific data point.
+        
+        Args:
+            idx (int): Index of the data point to update.
+            roll (float): Roll angle in radians.
+            pitch (float): Pitch angle in radians.
+            yaw (float): Yaw angle in radians.
+        """
+        self.data.at[idx, "roll"] = roll
+        self.data.at[idx, "pitch"] = pitch
+        self.data.at[idx, "yaw"] = yaw
+
     def remove_nans(self):
         """
         Remove rows with NaN values from the dataset.

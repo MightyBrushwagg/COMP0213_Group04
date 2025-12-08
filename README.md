@@ -1,3 +1,4 @@
+
 # Robot Simulation & Planning Framework
 
 This project provides a full pipeline for generating simulated robot data, training a classifier on that data, and testing grasping strategies inside a PyBullet-based simulation. It is structured around a single entry point (`main.py`) that exposes multiple modes via `argparse`.
@@ -13,12 +14,14 @@ This project provides a full pipeline for generating simulated robot data, train
 ## 📦 Installation
 
 ### 1. Clone the repository
+
 ```bash
 git clone <your_repo_link>
 cd <repo_name>
 ```
 
 ### 2. Create & activate a Python 3 environment
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate     # macOS/Linux
@@ -34,11 +37,13 @@ This project requires Python 3 and the following major packages:
 * `scikit-learn` (for ML classifiers)
 
 Install everything with:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 If PyBullet fails to import due to NumPy 2 issues, downgrade NumPy explicitly:
+
 ```bash
 pip install "numpy<2"
 ```
@@ -46,6 +51,7 @@ pip install "numpy<2"
 ## 🚀 Usage
 
 All functionality is accessed via:
+
 ```bash
 python main.py --mode <mode> [additional arguments]
 ```
@@ -53,6 +59,7 @@ python main.py --mode <mode> [additional arguments]
 ### Available Modes
 
 #### 1. Run Simulation (Generate Dataset)
+
 ```bash
 python main.py --mode run --object cube --gripper two_finger --iterations 1000
 ```
@@ -77,6 +84,7 @@ python main.py --mode run --object cylinder --gripper new_gripper --iterations 5
 ```
 
 #### 2. Train Classifier
+
 ```bash
 python main.py --mode train --model logistic_regression --file_save cube-two_finger-data.csv
 ```
@@ -113,6 +121,7 @@ python main.py --mode train --model forest --n_estimators 200
 ## 📊 Workflow Example
 
 Here's a typical workflow for this project:
+
 ```bash
 # Step 1: Generate training data with cube and two-finger gripper
 python main.py --mode run --object cube --gripper two_finger --iterations 1000
@@ -128,6 +137,7 @@ python main.py --mode train --model forest --file_save cylinder-new_gripper-data
 ```
 
 ## 📁 Project Structure
+
 ```
 ├── main.py                    # Main entry point with argparse interface
 ├── requirements.txt           # Python dependencies
@@ -147,6 +157,7 @@ python main.py --mode train --model forest --file_save cylinder-new_gripper-data
 
 * Ensure Python 3 is used when running the project.
 * PyBullet is not yet fully compatible with NumPy 2.x. If you see the error: "numpy.core.multiarray failed to import" downgrade NumPy using:
+
 ```bash
 pip install "numpy<2"
 ```
@@ -155,6 +166,5 @@ pip install "numpy<2"
 * The default data split is 120 training / 300 testing points, but this can be adjusted via command-line arguments.
 * When using `--model all`, the system will output comparative accuracy metrics for all three classifiers.
 
-## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+```
