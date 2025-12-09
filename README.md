@@ -29,7 +29,7 @@ The simulation generates random gripper poses around a target object, executes g
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.9+
 - PyBullet
 - NumPy
 - Pandas
