@@ -10,7 +10,9 @@ import numpy as np
 from sklearn import linear_model
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from abc import ABC, abstractmethod
+from matplotlib import pyplot as plt
 import joblib
 
 class Model(ABC):
@@ -124,7 +126,7 @@ class Logistic_Regression(Model):
             ValueError: If no data or target is provided.
         """
         if X is None and self.train_data is not None:
-            print(self.train_data)
+            # print(self.train_data)
             X = self.train_data[["x", "y", "z", "roll", "pitch", "yaw"]]
         else:
             raise ValueError("No data provided for fitting.")
@@ -289,7 +291,7 @@ class Random_Forest(Model):
             ValueError: If no data or target is provided.
         """
         if X is None and self.train_data is not None:
-            print(X)
+            # print(X)
             X = self.train_data[["x", "y", "z", "roll", "pitch", "yaw"]]
         else:
             raise ValueError("No data provided for fitting.")
@@ -308,6 +310,23 @@ class Random_Forest(Model):
             NotImplemented: Method to be implemented in future versions.
         """
         pass
+
+    def confusion(self):
+        """
+        Compute confusion matrix on test set.
+        
+        Returns:
+            numpy.ndarray: Confusion matrix.
+        """
+        
+        y_true = self.test_data["success"]
+        y_pred = self.model.predict(self.test_data[["x", "y", "z", "roll", "pitch", "yaw"]])
+        confuse = confusion_matrix(y_true, y_pred)
+        disp = ConfusionMatrixDisplay(confusion_matrix=confuse,
+                              display_labels=y_true.unique())
+
+        return disp
+        
 
     def test(self, data=None):
         """

@@ -1,0 +1,6 @@
+pybullet
+numpy<2
+pandas
+matplotlib
+scikit-learn
+joblib

@@ -21,6 +21,7 @@ if __name__ == "__main__":
     from Simulation.simulation import Simulation
     from Data.data import Data
     from Models.models import Logistic_Regression, SVM, Random_Forest, compare_models
+    import matplotlib.pyplot as plt
     import argparse
     
     parser = argparse.ArgumentParser()
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str, default="logistic_regression", choices=models, help="Type of model to train.")
     parser.add_argument("--file_save", type=str, default=None, help="File name to save simulation data.")
     parser.add_argument("--train_points", type=int, default=120, help="Number of training data points.")
-    parser.add_argument("--test_points", type=int, default=300, help="Number of testing data points.")
+    parser.add_argument("--test_points", type=int, default=100, help="Number of testing data points.")
     parser.add_argument("--val_points", type=int, default=0, help="Number of validation data points.")
     parser.add_argument("--n_estimators", type=int, default=100, help="Number of trees in Random Forest.")
     parser.add_argument("--shuffle", type=str2bool, default=True, help="Whether to shuffle data before splitting.")
@@ -73,6 +74,12 @@ if __name__ == "__main__":
             model.fit()
             model.save_model(f"Models/saved_models/{args.object}_{args.gripper}_{args.model}_model.pkl")
             print(f"{args.model} test accuracy: {model.test():.2f}")
+            disp = model.confusion()
+
+            disp.plot()
+            plt.title(f"Confusion Matrix for {args.object} with {args.gripper} gripper")
+            plt.savefig(f"Models/saved_models/{args.object}_{args.gripper}_{args.model}_confusion_matrix.jpg")
+            plt.show()
 
     elif args.mode == "test":
         print("Testing model...")
