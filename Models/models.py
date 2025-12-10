@@ -126,7 +126,7 @@ class Logistic_Regression(Model):
             ValueError: If no data or target is provided.
         """
         if X is None and self.train_data is not None:
-            print(self.train_data)
+            # print(self.train_data)
             X = self.train_data[["x", "y", "z", "roll", "pitch", "yaw"]]
         else:
             raise ValueError("No data provided for fitting.")
@@ -291,7 +291,7 @@ class Random_Forest(Model):
             ValueError: If no data or target is provided.
         """
         if X is None and self.train_data is not None:
-            print(X)
+            # print(X)
             X = self.train_data[["x", "y", "z", "roll", "pitch", "yaw"]]
         else:
             raise ValueError("No data provided for fitting.")
