@@ -5,7 +5,6 @@ A PyBullet-based simulation framework for robotic grasping research, combining p
 ## Table of Contents
 
 - [Overview](#overview)
-- [Project Structure](#project-structure)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -39,15 +38,38 @@ The simulation generates random gripper poses around a target object, executes g
 
 ## Installation
 
-1. Clone the repository:
+### 1. Clone the repository
 ```bash
 git clone https://github.com/MightyBrushwagg/OOP-Coursework.git
 cd OOP-Coursework
 ```
 
-2. Install dependencies:
+### 2. Create and activate a virtual environment
+
+Choose one of the following options:
+
+**Option A — Python venv**
 ```bash
-pip install pybullet numpy pandas matplotlib scikit-learn joblib
+# Create a virtual environment using Python 3.9+
+python3.9 -m venv venv
+
+# Activate it (Linux/macOS)
+source venv/bin/activate
+
+# Activate it (Windows)
+venv\Scripts\activate
+```
+
+**Option B — Conda environment**
+```bash
+# Create a conda environment with Python 3.9+
+conda create -n oop-env python=3.9
+conda activate oop-env
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
 ```
 
 ## Usage
