@@ -40,7 +40,7 @@ The simulation generates random gripper poses around a target object, executes g
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/MightyBrushwagg/OOP-Coursework.git
+git clone https://github.com/MightyBrushwagg/COMP0213_Group04.git
 cd OOP-Coursework
 ```
 
